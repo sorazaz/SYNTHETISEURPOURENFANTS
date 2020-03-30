@@ -87,46 +87,38 @@ BaseType_t xTaskCreate(  TaskSendMIDI,
                          READ_PRIORITY,
                          &xHandleSend_MIDI );
 
-union MSG_MIDI
+union msgMidi
 {
   // message MIDI séparé
   struct {unsigned char type; unsigned char data1; unsigned char data2;} b;
   // message MIDI 32 bits
-  unsigned long msg_midi_32;
+  unsigned long msgMidi32;
 };
 
 
 void SendValueMidi()
 {
-	uint8_t statut;
-	uint8_t data1;
-	uint8_t data2;
+
+  union msgMidi msg;
 
 	for(;;){
     	xTaskNotifyWait(0x00,//on attend la notification
-    			  ULONG_MAX,
-    			  &statut,
-    			  portMAX_DELAY);
-
-    	xTaskNotifyWait(0x00,//on attend la notification
-    			  ULONG_MAX,
-    			  &data1,
-    			  portMAX_DELAY);
-
-    	xTaskNotifyWait(0x00,//on attend la notification
-    			   ULONG_MAX,
-    			   &data2,
-    			   portMAX_DELAY);
+              			  ULONG_MAX,
+              			  &msg,
+              			  portMAX_DELAY);
 
     	xSemaphoreTake(semaphore_envoieMIDI, portMAX_DELAY);
     	//on demande le mutex pour ne pas couper l'envoi des données
 
-    	SendMidi(statut); //fonction qui envoie la valeur
-    	SendMidi(data1);
-    	SendMidi(data2);
+    	SendMidi((uint8_t) msg); //fonction qui envoie la valeur
 
     	SemaphoreGive(semaphore_Affichage); // on rend le mutex
 	}
+}
+
+int SendMidi(uint8_t value)//envoie une valeur sur 8 bits en MIDI
+{
+  while(!)
 }
 
 //________________________________________________________________________________
