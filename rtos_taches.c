@@ -54,7 +54,6 @@ BaseType_t xTaskCreate( TaskReadKeys,
                         &xHandleReadKeys );
 
 
-
 //________________________________________________________________________________
 //________________________________________________________________________________
 
@@ -91,9 +90,9 @@ BaseType_t xTaskCreate(  TaskSendMIDI,
 union MSG_MIDI
 {
   // message MIDI séparé
-  struct {unsigned char type; unsigned char data1; unsigned char data2; unsigned char b4;} b;
+  struct {unsigned char type; unsigned char data1; unsigned char data2;} b;
   // message MIDI 32 bits
-  unsigned long msg_midi;
+  unsigned long msg_midi_32;
 };
 
 
